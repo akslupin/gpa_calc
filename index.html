@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {
+               background-color: #a34a69;
+                justify-content: center;
+        display: flex;
+        flex-direction: column ;
+        align-items: center;
+
+        min-height: 100vh;
+        margin: 0
+        
+            }
+            select {
+                width: 210px;
+                background-color: rgb(203, 103, 142);
+                border: rgb(203, 103, 142) 2px solid;
+                margin: 8px 0;
+                padding: 8px;
+                border-radius: 8px;
+                
+                text-align: center;
+                font-family: 'Segoe UI';
+                font-size: 18px;
+                font-weight: bold;
+
+                
+
+
+            }
+            #subjects div{
+               
+                justify-content: space-between;
+                align-items: center ;
+                border-radius:  5px;
+            
+            }
+            #loadbtn { 
+                 background-color: rgb(203, 103, 142);
+                 width: 210px;
+                 border-radius: 8px;
+                 border: rgb(203, 103, 142);
+                 margin: 8px 0;
+                 padding: 8px;
+                 
+                text-align: center;
+                font-family: 'Segoe UI';
+                font-size: 18px;
+                font-weight: bold;
+  
+                
+            }
+            #calcbtn {
+                text-align: center;
+                font-family: 'Segoe UI';
+                font-size: 18px;
+                font-weight: bold;
+                background-color: rgb(203, 103, 142);
+                 width: 210px;
+                 border-radius: 8px;
+                 border: rgb(203, 103, 142);
+                 margin: 8px 0;
+                 padding: 8px;
+  
+            }
+            #rstbtn {
+                display: block;
+                margin: 0 auto;
+                padding: 2px;
+                text-align: center;
+                font-family: 'Segoe UI';
+                font-size: 18px;
+                font-weight: bold;
+                background-color: rgb(203, 103, 142);
+                 width: 70px;
+                 border-radius: 8px;
+                 border: rgb(203, 103, 142);
+                 
+                 padding: 8px;
+  
+            }
+            .content {
+                max-width: 210px;
+                margin: auto;
+                background: white;
+                padding: 20px;
+            }
+            label {
+                font-family: 'Segoe UI';
+                font-weight: bold;
+                
+            }
+            #loadbtn:hover, #calcbtn:hover , select:hover{
+    background-color: #a34a69; /* A slightly darker pink */
+}
+        </style>
+    </head>
+    <body class="content">
+        <div class="custom-select" style="width:200px;">
+        <select id="semesters">
+            <option value="">Select semester:</option>
+            <option value="sem1">Semester 1</option>
+            <option value="sem2">Semester 2</option>
+            <option value="sem3">Semester 3</option>
+            <option value="sem4">Semester 4</option>
+            <option value="sem5">Semester 5</option>
+        </select> </div>
+        <button id="loadbtn" onclick="loadSubjects()">Load Subjects</button>
+
+        <div id="subjects"  > </div>
+        <button id="calcbtn" onclick="calculateGPA()">Calculate GPA</button>
+        <p id="result"></p>
+        <button id="rstbtn" onclick="resetAll()"> Reset </button>
+        <script>
+        const gradepoint = {
+            "S" : 10,
+            "A" : 9,
+            "B" : 8,
+            "C" : 7,
+            "D" : 6,
+            "E" : 5,
+            "F" : 0
+        };
+        const semsubs =  {"Semester 1": {
+        theory: ["MFCS","DP","C","WT","EC"],
+        lab: ["C","IT","WT"]
+    },
+    "Semester 2": {
+        theory: ["FPS","CA","CPP","DS","ACN"],
+        lab: ["CPP","DS","CS Lab"]
+    } ,
+"Semester 3": {
+    theory: ["AM","JAVA","EVS","OS","DD"],
+        lab: ["JAVA","OS","DD"]
+}, "Semester 4": {
+        theory: ["DCC","NS","Python","SE","AL"],
+        lab: ["NS","Python","SE"]
+    },
+    "Semester 5": {
+        theory: ["ASP.NET","UNIX","OOSD","SQT","DM"],
+        lab: ["ASP.NET","UNIX","OOSD"]
+    }
+}
+    function loadSubjects(){
+        document.getElementById("result").innerText = "";
+      const selected_sem = document.getElementById("semesters");
+      const choice = selected_sem.value;
+
+      const display = document.getElementById("subjects");
+      display.innerHTML = "";
+      let selectedSub;
+      if (choice === "sem1"){
+        selectedSub = semsubs["Semester 1"].theory.concat(semsubs["Semester 1"].lab);
+      } else if (choice === "sem2") {
+        selectedSub = semsubs["Semester 2"].theory.concat(semsubs["Semester 2"].lab);
+      } else if (choice === "sem3"){
+        selectedSub = semsubs["Semester 3"].theory.concat(semsubs["Semester 3"].lab);
+      }  else if (choice === "sem4"){
+        selectedSub = semsubs["Semester 4"].theory.concat(semsubs["Semester 4"].lab);
+      } else if (choice === "sem5"){
+        selectedSub = semsubs["Semester 5"].theory.concat(semsubs["Semester 5"].lab);
+      }
+      selectedSub.forEach(sub => {
+        display.innerHTML += `
+        <div>
+            <label>${sub}</label>
+            <select class="grade-input">
+                <option value="S"> S </option>
+                <option value="A"> A </option>
+                <option value="B"> B </option>
+                <option value="C"> C </option>
+                <option value="D"> D </option>
+                <option value="E"> E </option>
+            </select>
+        </div>
+        `;
+    
+      });
+    }
+    function calculateGPA(){
+        const allDropDowns = document.querySelectorAll(".grade-input");
+        let total = 0;
+        allDropDowns.forEach((dropdown, index) => {
+            let grade = dropdown.value;
+            let points = gradepoint[grade];
+            if (index <= 4 ) {
+                total += points * 4;
+            }
+            else {
+                total += points * 2;
+            }
+            
+
+        });
+            let gpa = total/26;
+            document.getElementById("result").innerText = gpa.toFixed(2);
+
+        }
+        function resetAll(){
+            document.getElementById("subjects").innerHTML = "";
+            document.getElementById("result").innerText = "";
+        }
+    
+
+    </script>
+        </body>
+        </html>
