@@ -163,10 +163,6 @@
         });
             let gpa = total/26;
             document.getElementById("result").innerText = gpa.toFixed(2);
-            const sem = document.getElementById("semesters").value;
-            if (sem){
-                semesterGPAs[sem] = Number[gpa];
-            }
         }
     function resetAll(){
         document.getElementById("subjects").innerHTML = "";
@@ -176,3 +172,4 @@
     </script>
 </body>
 </html>
+
